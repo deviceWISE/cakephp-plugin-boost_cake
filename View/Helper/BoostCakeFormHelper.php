@@ -14,6 +14,11 @@ class BoostCakeFormHelper extends FormHelper {
 
 	protected $_fieldName = null;
 
+  public function parentInput($fieldName, $options = array())
+  {
+    return parent::input($fieldName, $options);
+  }
+
   /**
    * Overwrite FormHelper::input()
    * Generates a form input element complete with label and wrapper div
@@ -276,6 +281,12 @@ class BoostCakeFormHelper extends FormHelper {
 	}
 
 
+  public function parentCreate($model = null, $options = array())
+  {
+    return parent::create($model, $options);
+  }
+
+
   public function create($model = null, $options = array())
   {
     $default = array('inputDefaults' => array('div'       => 'form-group',
@@ -287,6 +298,12 @@ class BoostCakeFormHelper extends FormHelper {
     $html = parent::create($model, $options);
     $html .= '<fieldset>';
     return $html;
+  }
+
+
+  public function parentEnd($options = null)
+  {
+    return parent::end($options);
   }
 
 
