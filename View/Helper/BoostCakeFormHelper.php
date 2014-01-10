@@ -120,6 +120,11 @@ class BoostCakeFormHelper extends FormHelper {
       $html = str_replace('type="checkbox"', 'type="checkbox" data-toggle="checkbox"', $html);
 		}
 
+    if (stristr($html, '<select')) {
+      $html = preg_replace('/<select name="(.*?)" class=".*?"/', '<select name="${1}" class="select-block mbl"', $html);
+      $html = str_replace('</label>', '</label><br />', $html);
+    }
+
 		return $html;
 	}
 
