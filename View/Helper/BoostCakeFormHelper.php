@@ -324,8 +324,11 @@ class BoostCakeFormHelper extends FormHelper {
       unset($options['label']);
     }
 
-    $html = parent::submit($label, array('div' => 'form-group', 'class' => 'btn btn-primary'));
-    $html .= parent::button(__('Cancel'), array('id' => 'cancel-button', 'div' => 'form-group', 'class' => 'btn btn-default', 'onclick' => 'history.go(-1); return false;'));
+    $html = '<div class="form-group">';
+    $html .= parent::submit($label, array('div' => false, 'class' => 'btn btn-primary'));
+    $html .= '&nbsp;';
+    $html .= parent::button(__('Cancel'), array('id' => 'cancel-button', 'class' => 'btn btn-default', 'onclick' => 'history.go(-1); return false;'));
+    $html .= '</div>';
     $html .= '</fieldset>';
     $html .= parent::end($options);
 
