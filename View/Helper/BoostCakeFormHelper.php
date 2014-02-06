@@ -147,9 +147,11 @@ class BoostCakeFormHelper extends FormHelper {
         $field_name_key = $field_name_key[(count($field_name_key) - 1)];
       }
       foreach ($this->request->data as $model => $field) {
-        foreach ($field as $field_name => $data) {
-          if ($field_name_key == $field_name and is_array($data)) {
-            $this->request->data[$model][$field_name] = implode(',', $data);
+        if (is_array($field)) {
+          foreach ($field as $field_name => $data) {
+            if ($field_name_key == $field_name and is_array($data)) {
+              $this->request->data[$model][$field_name] = implode(',', $data);
+            }
           }
         }
       }
