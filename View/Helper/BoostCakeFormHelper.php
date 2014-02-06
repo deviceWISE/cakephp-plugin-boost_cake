@@ -74,7 +74,7 @@ class BoostCakeFormHelper extends FormHelper {
                      'afterInput' => '',
                      'errorClass' => 'has-error error');
 
-		$options = Hash::merge($default,$this->_inputDefaults,$options);
+		$options = Hash::merge($default, $this->_inputDefaults, $options);
 
 		$this->_inputOptions = $options;
 
@@ -127,6 +127,36 @@ class BoostCakeFormHelper extends FormHelper {
 
 		return $html;
 	}
+
+
+  public function tagInput($fieldName, $options = array())
+  {
+    // add the class "tag-input" to the input field
+    $options['class'][] = 'tag-input';
+
+    // make sure the values passed to the input field, if an array, is restructured into csv
+    if (isset($options['value']) and is_array($options['value'])) {
+      $options['value'] = implode(',', $options['value']);
+    }
+
+    // make sure the values passed to the input field, if an array, is restructured into csv
+    if (!empty($this->request->data)) {
+      $field_name_key = $fieldName;
+      if (stristr($field_name_key, '.')) {
+        $field_name_key = explode('.', $field_name_key);
+        $field_name_key = $field_name_key[(count($field_name_key) - 1)];
+      }
+      foreach ($this->request->data as $model => $field) {
+        foreach ($field as $field_name => $data) {
+          if ($field_name_key == $field_name and is_array($data)) {
+            $this->request->data[$model][$field_name] = implode(',', $data);
+          }
+        }
+      }
+    }
+
+    return $this->input($fieldName, $options);
+  }
 
 
   /**
