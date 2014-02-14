@@ -121,7 +121,7 @@ class BoostCakeFormHelper extends FormHelper {
 		}
 
     if (stristr($html, '<select')) {
-      $html = preg_replace('/<select name="(.*?)" class=".*?"/', '<select name="${1}" class="select-block mbl"', $html);
+      $html = preg_replace('/<select name="(.*?)" class=".*?"/', '<select name="${1}" class="select-block"', $html);
       $html = str_replace('</label>', '</label><br />', $html);
     }
 
@@ -356,7 +356,7 @@ class BoostCakeFormHelper extends FormHelper {
       unset($options['label']);
     }
 
-    $html = '<div class="form-group">';
+    $html = '<div class="form-group" style="padding-top: 1em;">';
     $html .= parent::submit($label, array('div' => false, 'class' => 'btn btn-primary'));
     $html .= '&nbsp;';
     $html .= parent::button(__('Cancel'), array('id' => 'cancel-button', 'class' => 'btn btn-default', 'onclick' => 'history.go(-1); return false;'));
