@@ -99,6 +99,13 @@ class BoostCakeFormHelper extends FormHelper {
     $inputDefaults = $this->_inputDefaults;
     $this->_inputDefaults = array();
 
+    if (!empty($options['help'])) {
+      if (!isset($options['after'])) {
+        $options['after'] = '';
+      }
+      $options['after'] .= '<span class="help-block">' . $options['help'] . '</span>';
+    }
+
     $html = parent::input($fieldName, $options);
 
     $this->_inputDefaults = $inputDefaults;
