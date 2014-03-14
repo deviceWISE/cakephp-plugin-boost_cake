@@ -14,10 +14,12 @@ class BoostCakeFormHelper extends FormHelper {
 
   protected $_fieldName = null;
 
+
   public function parentInput($fieldName, $options = array())
   {
     return parent::input($fieldName, $options);
   }
+
 
   /**
    * Overwrite FormHelper::input()
@@ -385,6 +387,71 @@ class BoostCakeFormHelper extends FormHelper {
     $html .= '</fieldset>';
     $html .= parent::end($options);
 
+    return $html;
+  }
+
+
+  /**
+   * Create a slider (and hidden input) form field
+   *
+   * @param string $fieldName
+   * @param array $options
+   */
+  public function slider($fieldName, $options = array())
+  {
+    $fieldId = Inflector::camelize($fieldName);
+
+    $min = (!empty($options['min'])) ? $options['min'] : 0;
+    $max = (!empty($options['max'])) ? $options['max'] : 10;
+    $value = 0;
+    if (strpos($fieldName, '.') > 0) {
+      $model = '';
+      $label = '';
+      list($model, $label) = explode('.', $fieldName, 2);
+      $value = (isset($this->data[$model][$label])) ? $this->data[$model][$label] : $value;
+      $sliderId = 'slider-' . str_replace(array('.', '_'), '-', Inflector::underscore($fieldName));
+    }
+    else {
+      $value = (isset($this->data[$this->defaultModel][$fieldName])) ? $this->data[$this->defaultModel][$fieldName] : $value;
+      $fieldId = $this->defaultModel . Inflector::camelize($fieldName);
+      $sliderId = 'slider-' . str_replace('_', '-', Inflector::underscore($this->defaultModel . '_' . $fieldName));
+    }
+    $value = (!empty($options['value'])) ? $options['value'] : $value;
+    $max = ($value > $max) ? $value : $max;
+    $min = ($value < $min) ? $value : $min;
+
+    $orientation = (!empty($options['orientation'])) ? $options['orientation'] : 'horizontal';
+    $label = (!empty($options['label'])) ? $options['label'] : Inflector::humanize($fieldName);
+
+    foreach (array('min', 'max', 'orientation', 'label') as $unset) {
+      unset($options[$unset]);
+    }
+
+    $html = $this->hidden($fieldName, $options);
+
+    $html .= <<<HTML
+<div class="form-group">
+  <label for="{$sliderId}">{$label}</label>
+  <div id="{$sliderId}">
+    <span class="ui-slider-value first" id="{$sliderId}-first">{$value}</span>
+  </div>
+</div>
+<script type="text/javascript">
+if ($("#{$sliderId}").length > 0) {
+  $("#{$sliderId}").slider({
+    min: {$min},
+    max: {$max},
+    value: {$value},
+    orientation: "{$orientation}",
+    range: "min",
+    slide: function(event, ui) {
+      $("#{$sliderId}-first").html(ui.value);
+      $("#{$fieldId}").val(ui.value);
+    }
+  });
+}
+</script>
+HTML;
     return $html;
   }
 }
