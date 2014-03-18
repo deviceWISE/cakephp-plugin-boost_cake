@@ -381,11 +381,19 @@ class BoostCakeFormHelper extends FormHelper {
 
     $html = '<div class="form-group" style="padding-top: 1em;">';
     $html .= parent::submit($label, array('div' => false, 'class' => 'btn btn-primary'));
-    $html .= '&nbsp;';
-    $html .= parent::button(__('Cancel'), array('id' => 'cancel-button', 'class' => 'btn btn-default', 'onclick' => 'history.go(-1); return false;'));
+    if (!isset($options['cancel']) or is_array($options['cancel'])) {
+      $cancel_label   = (!empty($options['cancel']['label']))   ? $options['cancel']['label']   : __('Cancel');
+      $cancel_id      = (!empty($options['cancel']['id']))      ? $options['cancel']['id']      : 'cancel-button';
+      $cancel_class   = (!empty($options['cancel']['class']))   ? $options['cancel']['class']   : 'btn btn-default';
+      $cancel_onclick = (!empty($options['cancel']['onclick'])) ? $options['cancel']['onclick'] : 'history.go(-1); return false;';
+
+      $html .= '&nbsp;';
+      $html .= parent::button($cancel_label, array('id' => $cancel_id, 'class' => $cancel_class, 'onclick' => $cancel_onclick));
+      unset($options['cancel']);
+    }
     $html .= '</div>';
     $html .= '</fieldset>';
-    $html .= parent::end($options);
+    $html .= (empty($options)) ? parent::end() : parent::end($options);
 
     return $html;
   }
