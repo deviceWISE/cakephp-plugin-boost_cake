@@ -400,6 +400,61 @@ class BoostCakeFormHelper extends FormHelper {
 
 
   /**
+   * Overwrite of FormHelper::file()
+   * Generates a form file input widget complete with label and wrapper div
+   *
+   * ### Options
+   *
+   * - `label` - Either a string label, or an array of options for the label. See FormHelper::label().
+   * - `unlock_hidden` - Boolean flag to unlock the hidden field that accompanies the file field.
+   * - `value` - Current value to set for the field.
+   * - `after` - Content to place after the label + field.
+   *
+   * @param string $fieldName Name of a field, in the form "Modelname.fieldname"
+   * @param array $options Array of HTML attributes.
+   */
+
+  public function file($fieldName, $options)
+  {
+    $this->_fieldName = $fieldName;
+
+    $options = Hash::merge($this->_inputDefaults, $options);
+
+    $this->_inputOptions = $options;
+
+    $label = isset($options['label']) ? $options['label'] : str_replace('_', ' ', $fieldName);
+
+    $after = '';
+    if (!empty($options['after'])) {
+      $after = $options['after'];
+      unset($options['after']);
+    }
+
+    if (isset($options['unlock_hidden']) and $options['unlock_hidden'] == true) {
+      $this->unlockField($fieldName .'_hidden');
+      unset($options['unlock_hidden']);
+    }
+
+    $html = '<div class="form-group">';
+    $html .= $this->label($label);
+    $html .= '  <div class="fileinput '. (empty($options['value']) ? 'fileinput-new' : 'fileinput-exists') .'" data-provides="fileinput">';
+    $html .= $this->hidden($fieldName .'_hidden', array('value' => (empty($options['value'])) ? '' : $options['value']));
+    $html .= '    <span class="btn btn-primary btn-embossed btn-file">';
+    $html .= '      <span class="fileinput-new"><span class="fui-upload"></span>&nbsp;&nbsp;Attach File</span>';
+    $html .= '      <span class="fileinput-exists"><span class="fui-gear"></span>&nbsp;&nbsp;Change</span>';
+    $html .= parent::file($fieldName, $options);
+    $html .= '    </span>';
+    $html .= '    <span class="fileinput-filename">'. (empty($options['value']) ? '' : $options['value']) .'</span>';
+    $html .= '    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>';
+    $html .= $after;
+    $html .= '  </div>';
+    $html .= '</div>';
+
+    return $html;
+  }
+
+
+  /**
    * Create a slider (and hidden input) form field
    *
    * @param string $fieldName
