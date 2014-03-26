@@ -400,6 +400,19 @@ class BoostCakeFormHelper extends FormHelper {
 
 
   /**
+   * Parent wrapper of FormHelper::file();
+   *
+   * @param string $fieldName
+   * @param array $options
+   * @return string
+   */
+  public function parentFile($fieldName, $options = array())
+  {
+    return parent::file($fieldName, $options);
+  }
+
+
+  /**
    * Overwrite of FormHelper::file()
    * Generates a form file input widget complete with label and wrapper div
    *
