@@ -436,6 +436,7 @@ class BoostCakeFormHelper extends FormHelper {
     $this->_inputOptions = $options;
 
     $label = isset($options['label']) ? $options['label'] : str_replace('_', ' ', $fieldName);
+    $label = ($label !== false) ? $this->label($label) : '';
 
     $after = '';
     if (!empty($options['after'])) {
@@ -449,7 +450,7 @@ class BoostCakeFormHelper extends FormHelper {
     }
 
     $html = '<div class="form-group">';
-    $html .= $this->label($label);
+    $html .= $label;
     $html .= '  <div class="fileinput '. (empty($options['value']) ? 'fileinput-new' : 'fileinput-exists') .'" data-provides="fileinput">';
     $html .= $this->hidden($fieldName .'_hidden', array('value' => (empty($options['value'])) ? '' : $options['value']));
     $html .= '    <span class="btn btn-primary btn-embossed btn-file">';
