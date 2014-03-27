@@ -438,31 +438,41 @@ class BoostCakeFormHelper extends FormHelper {
     $label = isset($options['label']) ? $options['label'] : str_replace('_', ' ', $fieldName);
     $label = ($label !== false) ? $this->label($label) : '';
 
-    $after = '';
-    if (!empty($options['after'])) {
-      $after = $options['after'];
-      unset($options['after']);
-    }
+    $fileinput_new_or_exists = empty($options['value']) ? 'fileinput-new' : 'fileinput-exists';
 
     if (isset($options['unlock_hidden']) and $options['unlock_hidden'] == true) {
       $this->unlockField($fieldName .'_hidden');
       unset($options['unlock_hidden']);
     }
 
-    $html = '<div class="form-group">';
-    $html .= $label;
-    $html .= '  <div class="fileinput '. (empty($options['value']) ? 'fileinput-new' : 'fileinput-exists') .'" data-provides="fileinput">';
-    $html .= $this->hidden($fieldName .'_hidden', array('value' => (empty($options['value'])) ? '' : $options['value']));
-    $html .= '    <span class="btn btn-primary btn-embossed btn-file">';
-    $html .= '      <span class="fileinput-new"><span class="fui-upload"></span>&nbsp;&nbsp;Attach File</span>';
-    $html .= '      <span class="fileinput-exists"><span class="fui-gear"></span>&nbsp;&nbsp;Change</span>';
-    $html .= parent::file($fieldName, $options);
-    $html .= '    </span>';
-    $html .= '    <span class="fileinput-filename">'. (empty($options['value']) ? '' : $options['value']) .'</span>';
-    $html .= '    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>';
-    $html .= $after;
-    $html .= '  </div>';
-    $html .= '</div>';
+    $hidden_field = $this->hidden($fieldName .'_hidden', array('value' => (empty($options['value'])) ? '' : $options['value']));
+
+    $parent_html = parent::file($fieldName, $options);
+
+    $fileinput_filename = empty($options['value']) ? '' : $options['value'];
+
+    $after = '';
+    if (!empty($options['after'])) {
+      $after = $options['after'];
+      unset($options['after']);
+    }
+
+    $html = <<<HTML
+<div class="form-group">
+  {$label}
+  <div class="fileinput {$fileinput_new_or_exists}" data-provides="fileinput">
+    {$hidden_field}
+    <span class="btn btn-primary btn-embossed btn-file">
+      <span class="fileinput-new"><span class="fui-upload"></span>&nbsp;&nbsp;Attach File</span>
+      <span class="fileinput-exists"><span class="fui-gear"></span>&nbsp;&nbsp;Change</span>
+      {$parent_html}
+    </span>
+    <span class="fileinput-filename">{$fileinput_filename}</span>
+    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+    {$after}
+  </div>
+</div>
+HTML;
 
     return $html;
   }
