@@ -389,8 +389,8 @@ class BoostCakeFormHelper extends FormHelper {
 
       $html .= '&nbsp;';
       $html .= parent::button($cancel_label, array('id' => $cancel_id, 'class' => $cancel_class, 'onclick' => $cancel_onclick));
-      unset($options['cancel']);
     }
+    unset($options['cancel']);
     $html .= '</div>';
     $html .= '</fieldset>';
     $html .= (empty($options)) ? parent::end() : parent::end($options);
