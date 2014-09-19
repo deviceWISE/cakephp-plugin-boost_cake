@@ -134,7 +134,7 @@ class BoostCakeFormHelper extends FormHelper {
       $html = str_replace('</label>', '</label><br />', $html);
     }
 
-    if ($options['required'] and preg_match('/^<div class=".*form-group.*"?>/', $html)) {
+    if (!empty($options['required']) and $options['required'] and preg_match('/^<div class=".*form-group.*"?>/', $html)) {
       $html = str_replace('form-group', 'form-group required', $html);
     }
 
