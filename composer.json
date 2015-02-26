@@ -1,5 +1,5 @@
 {
-    "name": "deviceWISE/boost_cake",
+    "name": "devicewise/boost_cake",
     "type": "cakephp-plugin",
     "description": "BoostCake is a plugin for CakePHP using Bootstrap",
     "keywords": [
