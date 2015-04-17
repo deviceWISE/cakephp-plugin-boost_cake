@@ -161,20 +161,31 @@ class BoostCakeFormHelper extends FormHelper {
 
     // make sure the values passed to the input field, if an array, is restructured into csv
     if (!empty($this->request->data)) {
-      $field_name_key = $fieldName;
-      if (stristr($field_name_key, '.')) {
-        $field_name_key = explode('.', $field_name_key);
-        $field_name_key = $field_name_key[(count($field_name_key) - 1)];
-      }
-      foreach ($this->request->data as $model => $field) {
-        if (is_array($field)) {
-          foreach ($field as $field_name => $data) {
-            if ($field_name_key == $field_name and is_array($data)) {
-              $this->request->data[$model][$field_name] = implode(',', $data);
-            }
+      $array_recursion = function (&$array, $depths) use ( &$array_recursion ) {
+        $key = $depths[0];
+
+        if (isset($array[$key])) {
+          $value = $array[$key];
+
+          if (count($depths)>1) {
+            array_shift($depths);
+            $array_recursion($array[$key], $depths);
+          }
+          elseif (is_array($value)) {
+            $array[$key] = implode(',', $value);
           }
         }
+      };
+
+      $field_name_key = $fieldName;
+
+      if (stristr($field_name_key, '.')) {
+        $field_name_key = explode('.', $field_name_key);
       }
+
+      $key = $field_name_key[0];
+      array_shift($field_name_key);
+      $array_recursion($this->request->data[$key], $field_name_key);
     }
 
     return $this->input($fieldName, $options);
