@@ -181,11 +181,10 @@ class BoostCakeFormHelper extends FormHelper {
 
       if (stristr($field_name_key, '.')) {
         $field_name_key = explode('.', $field_name_key);
+        $key = $field_name_key[0];
+        array_shift($field_name_key);
+        $array_recursion($this->request->data[$key], $field_name_key);
       }
-
-      $key = $field_name_key[0];
-      array_shift($field_name_key);
-      $array_recursion($this->request->data[$key], $field_name_key);
     }
 
     return $this->input($fieldName, $options);
