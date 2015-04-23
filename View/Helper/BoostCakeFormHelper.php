@@ -185,6 +185,13 @@ class BoostCakeFormHelper extends FormHelper {
         array_shift($field_name_key);
         $array_recursion($this->request->data[$key], $field_name_key);
       }
+      else {
+        $models = array_keys($this->request->data);
+
+        foreach ($models as $model) {
+          $array_recursion($this->request->data[$model], array($field_name_key));
+        }
+      }
     }
 
     return $this->input($fieldName, $options);
