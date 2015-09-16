@@ -78,6 +78,12 @@ class BoostCakeFormHelper extends FormHelper {
 
     $options = Hash::merge($default, $this->_inputDefaults, $options);
 
+    // OPEN-1605: We want fieldName assignment of label to be sentenced cased
+    // unless label is defined in the options.
+    if (!isset($options['label'])) {
+      $options['label'] = ucfirst(str_replace('_', ' ', Inflector::underscore($fieldName)));
+    }
+
     $this->_inputOptions = $options;
 
     $options['error'] = false;
