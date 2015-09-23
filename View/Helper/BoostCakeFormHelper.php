@@ -81,7 +81,17 @@ class BoostCakeFormHelper extends FormHelper {
     // OPEN-1605: We want fieldName assignment of label to be sentenced cased
     // unless label is defined in the options.
     if (!isset($options['label'])) {
-      $options['label'] = ucfirst(str_replace('_', ' ', Inflector::underscore($fieldName)));
+      if (strpos($fieldName, '.') !== false) {
+        $fieldElements = explode('.', $fieldName);
+        $text = array_pop($fieldElements);
+      } else {
+        $text = $fieldName;
+      }
+      if (substr($text, -3) === '_id') {
+        $text = substr($text, 0, -3);
+      }
+      $text = __(ucfirst(strtolower(Inflector::humanize(Inflector::underscore($text)))));
+      $options['label'] = $text;
     }
 
     $this->_inputOptions = $options;
