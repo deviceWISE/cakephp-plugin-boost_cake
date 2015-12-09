@@ -71,4 +71,18 @@ class BoostCakeHtmlHelper extends HtmlHelper {
 		return parent::image($path, $options);
 	}
 
+/**
+ * Converts the format of a string from camel case to sentence case.
+ * aSampleString -> A sample string
+ *
+ * @param string $string The string to format.
+ * @return string The converted string.
+ */
+  public function formatTitle($string) {
+    $string = Inflector::underscore($string);
+    $string = str_replace(array('_', '.'), ' ', $string);
+    $string = ucfirst($string);
+    return $string;
+  }
+
 }
