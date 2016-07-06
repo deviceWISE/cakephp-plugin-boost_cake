@@ -78,7 +78,7 @@ class BoostCakeHtmlHelper extends HtmlHelper {
  * @param string $string The string to format.
  * @return string The converted string.
  */
-  public function formatTitle($string) {
+  public function strToSentence($string) {
     $string = Inflector::underscore($string);
     $string = str_replace(array('_', '.'), ' ', $string);
     $string = ucfirst($string);
