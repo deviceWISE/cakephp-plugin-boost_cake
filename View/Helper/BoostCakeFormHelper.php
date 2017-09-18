@@ -168,7 +168,7 @@ class BoostCakeFormHelper extends FormHelper {
   public function tagInput($fieldName, $options = array())
   {
     // add the class "tag-input" to the input field
-    // $options['class'][] = 'tag-input';
+    $options['class'][] = 'tag-input';
 
     // make sure the values passed to the input field, if an array, is restructured into csv
     if (isset($options['value']) and is_array($options['value'])) {
