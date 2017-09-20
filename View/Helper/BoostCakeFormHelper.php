@@ -132,11 +132,11 @@ class BoostCakeFormHelper extends FormHelper {
       if (isset($options['before'])) {
         $html = str_replace($options['before'], '%before%', $html);
       }
-      $regex = '/(<label.*?>)(.*?<\/label>)/';
+      $regex = '/(<label.*?>)/';
       if (preg_match($regex, $html, $label)) {
         $label = str_replace('$', '\$', $label);
         $html = preg_replace($regex, '', $html);
-        $html = preg_replace('/(<input type="checkbox".*?>)/', "{$label[1]}$1 {$label[2]}", $html);
+        $html = preg_replace('/(<input.*type="checkbox".*?>)/', "{$label[1]}$1", $html);
       }
       if (isset($options['before'])) {
         $html = str_replace('%before%', $options['before'], $html);
@@ -261,9 +261,6 @@ class BoostCakeFormHelper extends FormHelper {
   protected function _getInput($args)
   {
     $input = parent::_getInput($args);
-    if ($this->_inputType === 'checkbox' && $this->_inputOptions['checkboxDiv'] !== false) {
-      $input = $this->Html->div($this->_inputOptions['checkboxDiv'], $input);
-    }
 
     $beforeInput = $this->_inputOptions['beforeInput'];
     $afterInput = $this->_inputOptions['afterInput'];
@@ -279,13 +276,17 @@ class BoostCakeFormHelper extends FormHelper {
     }
 
     $html = $beforeInput . $input . $afterInput . $error;
+/* Why?
+    if ($this->_inputType === 'checkbox' && $this->_inputOptions['checkboxDiv'] !== false) {
+      $html = $this->Html->div($this->_inputOptions['checkboxDiv'], $html);
+    }
 
     if ($this->_divOptions) {
       $tag = $this->_divOptions['tag'];
       unset($this->_divOptions['tag']);
       $html = $this->Html->tag($tag, $html, $this->_divOptions);
     }
-
+*/
     return $html;
   }
 
