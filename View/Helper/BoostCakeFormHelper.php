@@ -146,8 +146,8 @@ class BoostCakeFormHelper extends FormHelper
         }
 
         if (stristr($html, '<select')) {
-            $html = preg_replace('/<select name="(.*?)" class=".*?"/', '<select name="${1}" class="select-block"', $html);
-            $html = str_replace('</label>', '</label><br />', $html);
+          $html = preg_replace('/<select name="(.*?)" class="(.*?)"/', '<select name="${1}" class="form-control ${2}"', $html);
+          $html = str_replace('</label>', '</label><br />', $html);
         }
 
         if (!empty($options['required']) and $options['required'] and preg_match('/^<div class=".*form-group.*"?>/', $html)) {
