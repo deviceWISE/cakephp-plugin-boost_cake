@@ -63,7 +63,6 @@ class BoostCakeFormHelper extends FormHelper
      * @return string Completed form widget.
      * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/form.html#creating-form-elements
      */
-
     public function input($fieldName, $options = array())
     {
         $this->_fieldName = $fieldName;
