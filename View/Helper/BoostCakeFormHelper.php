@@ -93,6 +93,12 @@ class BoostCakeFormHelper extends FormHelper
             $options['label'] = $text;
         }
 
+        // Default single select button label to 'No available options' and disable it if no options.
+        if (empty($options['options']) && empty($options['empty']) && !isset($options['multiple'])) {
+            $options['empty'] = __('No available options');
+            $options['disabled'] = 'disabled';
+        }
+
         $this->_inputOptions = $options;
 
         $options['error'] = false;
