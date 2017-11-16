@@ -93,6 +93,12 @@ class BoostCakeFormHelper extends FormHelper
             $options['label'] = $text;
         }
 
+        // Default single select button label to 'No available options' and disable it if no options.
+        if (isset($options['options']) && !count($options['options']) && empty($options['empty']) && !isset($options['multiple'])) {
+            $options['empty'] = __('No available options');
+            $options['disabled'] = 'disabled';
+        }
+
         $this->_inputOptions = $options;
 
         $options['error'] = false;
@@ -131,11 +137,11 @@ class BoostCakeFormHelper extends FormHelper
             if (isset($options['before'])) {
                 $html = str_replace($options['before'], '%before%', $html);
             }
-            $regex = '/(<label.*?>)(.*?<\/label>)/';
+            $regex = '/(<label.*?>)/';
             if (preg_match($regex, $html, $label)) {
                 $label = str_replace('$', '\$', $label);
                 $html = preg_replace($regex, '', $html);
-                $html = preg_replace('/(<input type="checkbox".*?>)/', "{$label[1]}$1 {$label[2]}", $html);
+                $html = preg_replace('/(<input type="checkbox".*?>)/', "{$label[1]}$1", $html);
             }
             if (isset($options['before'])) {
                 $html = str_replace('%before%', $options['before'], $html);
@@ -145,7 +151,7 @@ class BoostCakeFormHelper extends FormHelper
         }
 
         if (stristr($html, '<select')) {
-          $html = preg_replace('/<select name="(.*?)" class=".*?"/', '<select name="${1}" class="select-block ${2}"', $html);
+          $html = preg_replace('/<select name="(.*?)" class="(.*?)"/', '<select name="${1}" class="${2}"', $html);
           $html = str_replace('</label>', '</label><br />', $html);
         }
 
@@ -155,7 +161,6 @@ class BoostCakeFormHelper extends FormHelper
 
         return $html;
     }
-
 
     public function checkboxInput($fieldName, $options = array())
     {
@@ -259,9 +264,6 @@ class BoostCakeFormHelper extends FormHelper
     protected function _getInput($args)
     {
         $input = parent::_getInput($args);
-        if ($this->_inputType === 'checkbox' && $this->_inputOptions['checkboxDiv'] !== false) {
-            $input = $this->Html->div($this->_inputOptions['checkboxDiv'], $input);
-        }
 
         $beforeInput = $this->_inputOptions['beforeInput'];
         $afterInput = $this->_inputOptions['afterInput'];
@@ -277,12 +279,6 @@ class BoostCakeFormHelper extends FormHelper
         }
 
         $html = $beforeInput . $input . $afterInput . $error;
-
-        if ($this->_divOptions) {
-            $tag = $this->_divOptions['tag'];
-            unset($this->_divOptions['tag']);
-            $html = $this->Html->tag($tag, $html, $this->_divOptions);
-        }
 
         return $html;
     }
@@ -375,12 +371,10 @@ class BoostCakeFormHelper extends FormHelper
         return $out;
     }
 
-
     public function parentCreate($model = null, $options = array())
     {
         return parent::create($model, $options);
     }
-
 
     public function create($model = null, $options = array())
     {
