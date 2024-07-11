@@ -608,7 +608,7 @@ HTML;
             $fieldId = $this->defaultModel . Inflector::camelize($fieldName);
             $sliderId = 'slider-' . str_replace('_', '-', Inflector::underscore($this->defaultModel . '_' . $fieldName));
         }
-        $value = (!empty($options['value'])) ? $options['value'] : $value;
+        $value = (isset($options['value'])) ? $options['value'] : $value;
 
         $value = ($value > $max) ? $max : $value;
         $value = ($value < $min) ? $min : $value;
